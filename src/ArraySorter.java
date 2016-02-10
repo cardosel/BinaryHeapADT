@@ -27,24 +27,32 @@ public class ArraySorter
   }
   
   
-  public static <T> void heapSort(Comparable[] array)
+  public static void heapsort( Comparable [ ] array )
   {
-	  BinaryHeapA bh = new BinaryHeapA();
-	  
-	  bh.buildMaxHeap(array);
-	  
-	  
+      for( int i = array.length / 2; i >= 0; i-- ) 
+          siftDown();
+      for( int i = array.length - 1; i > 0; i-- )
+      {
+          swap( array, 0, i );            
+
+      }
   }
-  
-  public static void heapify(Comparable[] array){
+
+
+private static void siftDown() {
 	
-	  
-		  
 	
-			  
-	  }
-		   
-	  
+}
+
+
+
+private static void swap(Comparable[] a, int i, int i2) {
+	Comparable[] valueArray = a;
+	Comparable temp = valueArray[i];
+	valueArray[i] = valueArray[i2];
+	valueArray[i2] = temp;
+}
+ 
  
   public static void insertionSort(Comparable[] array)
   {
@@ -145,5 +153,10 @@ public class ArraySorter
         j++;
       }
     }
+  
   }
 }
+
+
+
+

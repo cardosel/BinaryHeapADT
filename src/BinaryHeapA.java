@@ -7,14 +7,27 @@ public class BinaryHeapA<T extends Comparable<T>> implements BinaryHeap<T>{
 	
 private Node root = null;
 private int heapSize = 0;
+private Comparable[] internalArray;
 
 
-			
-	public void add(T value) {
+public void delete() {
+    for (int i = heapSize; i < internalArray.length - 1; i++) {
+        internalArray[i] = internalArray[i+1];
+    }
+}
+public BinaryHeapA() {
+    heapSize = internalArray.length;
+    internalArray = (T[]) new Comparable[ ( heapSize + 2 ) * 11 / 10 ];
+
+    buildMaxHeap(internalArray);
+}	
+	
+	public void maxHeapify(Comparable[] valueArray) {
 			int tempSize = heapSize + 1;
 			Node currentNode = root;
+			
 			if (heapSize == 0 || root == null) {
-				root = new Node(value, null);
+				root = new Node(valueArray, null);
 				currentNode = root;
 				//System.out.println(currentNode.value + " is added at root");
 			} else {
@@ -41,14 +54,14 @@ private int heapSize = 0;
 				}
 	
 				if (currentNode.leftChild == null) {
-					currentNode.leftChild = new Node(value, currentNode);
+					currentNode.leftChild = new Node(valueArray, currentNode);
 					//System.out.println(currentNode.leftChild.value
 					//		+ " added to left. parent is " + currentNode.value);
 					siftUp(currentNode.leftChild, "add");
 	
 				} else if (currentNode.leftChild != null
 						&& currentNode.rightChild == null) {
-					currentNode.rightChild = new Node(value, currentNode);
+					currentNode.rightChild = new Node(valueArray, currentNode);
 	//
 				//	System.out.println(currentNode.rightChild.value
 					//		+ " added to right. parent is " + currentNode.value);
@@ -61,32 +74,32 @@ private int heapSize = 0;
 		}			
 			
 /*
-* here lies the array methods of the heap.
+* below are the array methods of the heap.
 */
 // ////////////////////////////////////////////////////////////////////////////
-// ////////////////////////////////////////////////////////////////////////////
+
 	
-	public void fromArray(T[] array) {
-		T[] valueArray = array;
+	public void fromArray(Comparable[] internalArray) {
+		Comparable[] valueArray = internalArray;
 		for (int i = 0; i < valueArray.length; i++) {
-			add(valueArray[i]);
+			maxHeapify(valueArray);
 		}
 
 	}	
 			
 			
 
-	public T[] buildMaxHeap(T[] array) {
-		T[] sortedArray = (T[]) java.lang.reflect.Array.newInstance(array
+	public Comparable[] buildMaxHeap(Comparable[] internalArray) {
+		Comparable[] sortedArray = (T[]) java.lang.reflect.Array.newInstance(internalArray
 				.getClass().getComponentType(), heapSize);
-		sortedArray = toArray(array);
+		sortedArray = toArray(internalArray);
 		
 		if(heapSize == 1){
 			return sortedArray;
 		}
 		for (int i = 0; i < (heapSize)  ; i++) {
 			swap(sortedArray, 0, sortedArray.length - 1 - i);
-			arraySiftDown(sortedArray, i + 1);
+			array(sortedArray, i + 1);
 		}
 		swap(sortedArray, 0, 1);
 
@@ -95,16 +108,16 @@ private int heapSize = 0;
 	
 	//-----------------------------------
 	
-	private void swap(T[] array, int i1, int i2) {
-		T[] valueArray = array;
-		T temp = valueArray[i1];
+	private void swap(Comparable[] internalArray, int i1, int i2) {
+		Comparable[] valueArray = internalArray;
+		Comparable temp = valueArray[i1];
 		valueArray[i1] = valueArray[i2];
 		valueArray[i2] = temp;
 	}
 	
 	
 	
-	private void arraySiftDown(T[] array, int counter) {
+	private void array(Comparable[] internalArray, int counter) {
 		int pointer = 0;
 		int left;
 		int right;
@@ -112,26 +125,26 @@ private int heapSize = 0;
 		for (int i = 0; i < (Math.floor(Math.log(heapSize - counter) / Math.log(2))); i++) {
 			left = 2 * pointer + 1;
 			right = 2 * pointer + 2;
-			if (left >= array.length - counter) {
+			if (left >= internalArray.length - counter) {
 				return;
 			}
-			if ((right >= array.length - counter) && (left < array.length - counter)) {
-				if (array[pointer].compareTo(array[left]) > 0) {
-					swap(array, pointer, left);
+			if ((right >= internalArray.length - counter) && (left < internalArray.length - counter)) {
+				if (internalArray[pointer].compareTo(internalArray[left]) > 0) {
+					swap(internalArray, pointer, left);
 					pointer = left;
 				}
 	
 			}
 	
-			if (left < array.length - counter && right < array.length - counter) {
-				if(array[right].compareTo(array[left]) > 0){
-					if(array[pointer].compareTo(array[right]) < 0){
-						swap(array, pointer, right);
+			if (left < internalArray.length - counter && right < internalArray.length - counter) {
+				if(internalArray[right].compareTo(internalArray[left]) > 0){
+					if(internalArray[pointer].compareTo(internalArray[right]) < 0){
+						swap(internalArray, pointer, right);
 						pointer = right;
 					}
 				} else{
-					if(array[pointer].compareTo(array[left]) < 0 ){
-						swap(array, pointer, left);
+					if(internalArray[pointer].compareTo(internalArray[left]) < 0 ){
+						swap(internalArray, pointer, left);
 						pointer = left;
 					}
 				}
@@ -142,10 +155,10 @@ private int heapSize = 0;
 	
 	
 	
-	public T[] toArray(T[] array) {
+	public Comparable[] toArray(Comparable[] internalArray) {
 		int counter = 0;
 		Node tempNode;
-		T[] valuesArray = (T[]) java.lang.reflect.Array.newInstance(array
+		Comparable[] valuesArray = (T[]) java.lang.reflect.Array.newInstance(internalArray
 				.getClass().getComponentType(), heapSize);
 		ArrayList<BinaryHeapA<T>.Node> queue = new ArrayList<Node>();
 		queue.add(root);
@@ -222,7 +235,7 @@ private int heapSize = 0;
 private void swap(Node node1, Node node2) {
 		
 //		System.out.println(node1.value + " is swapped with " + node2.value);
-		T temp = node1.value;
+		Comparable temp = node1.value;
 		node1.value = node2.value;
 		node2.value = temp;
 	}
@@ -241,20 +254,24 @@ private int nextDepth() {
 
 private class Node {
 
-	protected T value;
+	protected Comparable value;
 	protected Node rightChild;
 	protected Node leftChild;
 	protected Node parent;
 
-	Node(T t, Node parent) {
+	Node(Comparable valueArray, Node parent) {
 
-		value = t;
+		value = valueArray;
 		this.parent = parent;
+	}
+
+	public Node(Comparable[] valueArray, BinaryHeapA<T>.Node currentNode) {
+		// TODO Auto-generated constructor stub
 	}
 }
 
-public T remove() {
-	T removedValue = root.value;
+public Comparable remove() {
+	Comparable removedValue = root.value;
 
 	Node currentNode = root;
 	int tempSize = heapSize;
@@ -313,7 +330,7 @@ public T remove() {
 	return removedValue;
 }
 
-	public T peek(){
+	public Comparable peek(){
 		return root.value;
 	}
 

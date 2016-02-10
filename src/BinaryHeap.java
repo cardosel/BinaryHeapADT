@@ -1,15 +1,19 @@
 
 public interface BinaryHeap<T extends Comparable<T>> {
 	
-	public void add(T value);
 	
-	public T remove();
 	
-	public T[] toArray(T[] array);
+	public void maxHeapify(Comparable[] valueArray);
 	
-	public void fromArray(T[] array);
+	public Comparable[] buildMaxHeap(Comparable[] internalArray);
 	
-	public T[] buildMaxHeap(T[] array);
+	public Comparable remove();
+	
+	public Comparable[] toArray(Comparable[] internalArray);
+	
+	public void fromArray(Comparable[] internalArray);
+	
+	
 	
 	
 	

@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 public class SortingPanel
   extends JPanel
 {
-  private static String[] sortingAlgs = { "Selection", "Insertion", "Bubble" };
+  private static String[] sortingAlgs = { "Selection", "Insertion", "Bubble", "Heapsort" };
   private Integer[] intArray;
   private BarArrayDisplay barDisplay;
   private JComboBox algList;
@@ -104,14 +104,15 @@ public class SortingPanel
         break;
       case 2: 
         ArraySorter.bubbleSort(this.intArray);
+      case 3: 
+          ArraySorter.heapsort(this.intArray);
       }
-    case 3: 
-        ArraySorter.heapSort(this.intArray);
+    	
       }
       this.barDisplay.repaint();
       repaint();
     }
-  }
+  
   
   public static Integer[] randomIntegerArray(int lo, int hi, int length)
   {
