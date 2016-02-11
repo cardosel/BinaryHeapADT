@@ -25,27 +25,27 @@ public class ArraySorter
     }
     return minIndex;
   }
-  
+  // method to call heapSort using heapify
   public static void heapSort(Comparable[] array)
   {
     for (int i = 1; i < array.length; i++) {
-      insert(array, i);
+      heapify(array, i);
     }
   }
-  
+  // heapify method
   public static void heapify(Comparable[] array, int n) {
 		
 		// create first heap
 		for (int rootIndex = n/2-1; rootIndex >= 0; rootIndex--)
-			reheap(array, rootIndex, n-1);
+			buildHeap(array, rootIndex, n-1);
 		swap(array, 0, n-1);
 		for (int lastIndex = n-2; lastIndex > 0; lastIndex--) {
-			reheap(array, 0, lastIndex);
+			buildHeap(array, 0, lastIndex);
 			swap(array, 0, lastIndex);
 		} 
 	}
-
-  private static void reheap(Comparable[] heap, int rootIndex, int lastIndex) {
+// method to reassemble heap
+  private static void buildHeap(Comparable[] heap, int rootIndex, int lastIndex) {
 		boolean done = false;
 		Comparable orphan = heap[rootIndex];
 		int largerChildIndex = 2 * rootIndex + 1; // index of left child, if any

@@ -60,7 +60,7 @@ public class SorterTester
     System.out.println("array bubble sort took " + (pre2 - pre1) + " ms");
     System.out.println("************************");
   }
-  
+  // tester method for heapSort
   public static void testArrayHeapSort(Comparable[] array)
   {
     if (PRINT_NUMS)

@@ -41,10 +41,10 @@ public void delete() {
 				//System.out.println(currentNode.value + " is added at root");
 			} else {
 				boolean left = true;
-				for (int i = 0; i < nextDepth() - 1; i++) {
+				for (int i = 0; i < nextLevel() - 1; i++) {
 	
-					if ((((Math.pow(2, nextDepth() + 1 - i) - 1)) - (tempSize)) >= Math
-							.pow(2, nextDepth() - i - 1)) {
+					if ((((Math.pow(2, nextLevel() + 1 - i) - 1)) - (tempSize)) >= Math
+							.pow(2, nextLevel() - i - 1)) {
 						currentNode = currentNode.leftChild;
 						left = true;
 					//	System.out.println("moved left");
@@ -55,10 +55,10 @@ public void delete() {
 					}
 	
 					if (left) {
-						tempSize = (int) (tempSize - Math.pow(2, nextDepth() - i
+						tempSize = (int) (tempSize - Math.pow(2, nextLevel() - i
 								- 1));
 					} else {
-						tempSize = (int) (tempSize - Math.pow(2, nextDepth() - i));
+						tempSize = (int) (tempSize - Math.pow(2, nextLevel() - i));
 					}
 				}
 	
@@ -66,7 +66,7 @@ public void delete() {
 					currentNode.leftChild = new Node(array, currentNode);
 					//System.out.println(currentNode.leftChild.value
 					//		+ " added to left. parent is " + currentNode.value);
-					siftUp(currentNode.leftChild, "add");
+					shiftUp(currentNode.leftChild, "add");
 	
 				} else if (currentNode.leftChild != null
 						&& currentNode.rightChild == null) {
@@ -74,7 +74,7 @@ public void delete() {
 	//
 				//	System.out.println(currentNode.rightChild.value
 					//		+ " added to right. parent is " + currentNode.value);
-					siftUp(currentNode.rightChild, "add");
+					shiftUp(currentNode.rightChild, "add");
 	
 				}
 	
@@ -85,19 +85,20 @@ public void delete() {
 /*
 * below are the array methods of the heap.
 */
-// ////////////////////////////////////////////////////////////////////////////
+//
 
-	
+	// method to get the node from the array
 	public void fromArray(Comparable[] internalArray) {
-		Comparable[] valueArray = internalArray;
-		for (int i = 0; i < valueArray.length; i++) {
-			maxHeapify(valueArray);
+		Comparable[] indexArray = internalArray;
+		for (int i = 0; i < indexArray.length; i++) {
+			maxHeapify(indexArray);
 		}
 
 	}	
 			
 			
-
+	// method to build the max heap taking in internalArray,
+	//sorts array and swaps values greater than size of heap
 	public Comparable[] buildMaxHeap(Comparable[] internalArray) {
 		Comparable[] sortedArray = (T[]) java.lang.reflect.Array.newInstance(internalArray
 				.getClass().getComponentType(), heapSize);
@@ -108,7 +109,7 @@ public void delete() {
 		}
 		for (int i = 0; i < (heapSize)  ; i++) {
 			swap(sortedArray, 0, sortedArray.length - 1 - i);
-			array(sortedArray, i + 1);
+			sorter(sortedArray, i + 1);
 		}
 		swap(sortedArray, 0, 1);
 
@@ -116,17 +117,19 @@ public void delete() {
 	}
 	
 	//-----------------------------------
-	
+	// method to swap values
 	private void swap(Comparable[] internalArray, int i1, int i2) {
-		Comparable[] valueArray = internalArray;
-		Comparable temp = valueArray[i1];
-		valueArray[i1] = valueArray[i2];
-		valueArray[i2] = temp;
+		Comparable[] indexArray = internalArray;
+		Comparable temp = indexArray[i1];
+		indexArray[i1] = indexArray[i2];
+		indexArray[i2] = temp;
 	}
 	
 	
+	//-----------------------------------
 	
-	private void array(Comparable[] internalArray, int counter) {
+	// method create sorted array in internalArray
+	private void sorter(Comparable[] internalArray, int counter) {
 		int pointer = 0;
 		int left;
 		int right;
@@ -161,20 +164,22 @@ public void delete() {
 		}
 	}
 	
+	//-----------------------------------
 	
 	
 	
+	// method to get left and right values to new array from internalArray
 	public Comparable[] toArray(Comparable[] internalArray) {
 		int counter = 0;
 		Node tempNode;
-		Comparable[] valuesArray = (T[]) java.lang.reflect.Array.newInstance(internalArray
+		Comparable[] valueArray = (T[]) java.lang.reflect.Array.newInstance(internalArray
 				.getClass().getComponentType(), heapSize);
 		ArrayList<BinaryHeapA<T>.Node> queue = new ArrayList<Node>();
 		queue.add(root);
 
 		while (!queue.isEmpty()) {
 			tempNode = (Node) queue.remove(0);
-			valuesArray[counter] = tempNode.value;
+			valueArray[counter] = tempNode.value;
 			if (tempNode.leftChild != null) {
 				queue.add(tempNode.leftChild);
 			}
@@ -184,19 +189,21 @@ public void delete() {
 			counter++;
 		}
 
-		return valuesArray;
+		return valueArray;
 	}
 	
 	
 	
-	//--------------------------------------------------
-	private void siftUp(Node node, String string) {
+	
+ 
+	//method to shift node value up tree
+	private void shiftUp(Node node, String string) {
 		Node n = node;
 		if (n.parent == null) {
 			return;
 		}
 
-		for (int i = 0; i < nextDepth(); i++) {
+		for (int i = 0; i < nextLevel(); i++) {
 
 			if (n.value.compareTo(n.parent.value) > 0) {
 				swap(n, n.parent);
@@ -207,10 +214,10 @@ public void delete() {
 		}
 
 	}
-
-	private void siftDown(Node node) {
+// method to shift value of node down tree
+	private void shiftDown(Node node) {
 		Node n = node;
-		for (int i = 0; i < depth(); i++) {
+		for (int i = 0; i < level(); i++) {
 
 			if (n.leftChild != null && n.rightChild != null) {
 				if (n.leftChild.value.compareTo(n.value) > 0
@@ -240,7 +247,7 @@ public void delete() {
 		}
 
 	}
-	
+	// method to swap values of two nodes
 private void swap(Node node1, Node node2) {
 		
 //		System.out.println(node1.value + " is swapped with " + node2.value);
@@ -248,19 +255,21 @@ private void swap(Node node1, Node node2) {
 		node1.value = node2.value;
 		node2.value = temp;
 	}
-
-private int depth() {
-	int depth = (int) Math.floor(((double) Math.log(heapSize) / (double) Math
+// method that returns value of current level
+private int level() {
+	int level = (int) Math.floor(((double) Math.log(heapSize) / (double) Math
 			.log(2)));
-	return depth;
+	return level;
 }
 
-private int nextDepth() {
-	int depth = (int) Math
+// method that returns value of next level
+private int nextLevel() {
+	int level = (int) Math
 			.floor(((double) Math.log(heapSize + 1) / (double) Math.log(2)));
-	return depth;
+	return level;
 }
 
+// class to represent nodes for right child, left child, and parent
 private class Node {
 
 	protected Comparable value;
@@ -268,17 +277,18 @@ private class Node {
 	protected Node leftChild;
 	protected Node parent;
 
-	Node(Comparable valueArray, Node parent) {
+	// returns value within the parent node
+	Node(Comparable indexArray, Node parent) {
 
-		value = valueArray;
+		value = indexArray;
 		this.parent = parent;
 	}
-
-	public Node(Comparable[] valueArray, BinaryHeapA<T>.Node currentNode) {
-		// TODO Auto-generated constructor stub
+	
+	public Node(Comparable[] indexArray, BinaryHeapA<T>.Node currentNode) {
+		// compares two nodes
 	}
 }
-
+// method to remove value
 public Comparable remove() {
 	Comparable removedValue = root.value;
 
@@ -299,10 +309,10 @@ public Comparable remove() {
 		heapSize--;
 		return removedValue;
 	}
-	for (int i = 0; i < depth(); i++) {
+	for (int i = 0; i < level(); i++) {
 
-		if ((((Math.pow(2, depth() + 1 - i) - 1)) - (tempSize)) >= Math
-				.pow(2, depth() - i - 1)) {
+		if ((((Math.pow(2, level() + 1 - i) - 1)) - (tempSize)) >= Math
+				.pow(2, level() - i - 1)) {
 
 			currentNode = currentNode.leftChild;
 
@@ -316,9 +326,9 @@ public Comparable remove() {
 		}
 
 		if (left) {
-			tempSize = (int) (tempSize - Math.pow(2, depth() - i - 1));
+			tempSize = (int) (tempSize - Math.pow(2, level() - i - 1));
 		} else {
-			tempSize = (int) (tempSize - Math.pow(2, depth() - i));
+			tempSize = (int) (tempSize - Math.pow(2, level() - i));
 		}
 
 	}
@@ -329,7 +339,7 @@ public Comparable remove() {
 		currentNode.parent.rightChild = null;
 	}
 //	System.out.println("root is now " + root.value);
-	siftDown(root);
+	shiftDown(root);
 
 	if (heapSize > 0) {
 
@@ -339,11 +349,13 @@ public Comparable remove() {
 	return removedValue;
 }
 
+// method that returns value of root
 	public Comparable peek(){
 		return root.value;
 	}
 
-	public void add(Comparable newEntry) {
+	// method that adds a new value to the internalArray
+	public void add(Comparable newValue) {
 		lastIndex++;
 	
 		if (lastIndex >= internalArray.length)
@@ -351,15 +363,16 @@ public Comparable remove() {
 	
 		int newIndex = lastIndex;
 		int parentIndex = newIndex/2;
-		while ( (newIndex > 1) && newEntry.compareTo(internalArray[parentIndex]) > 0) {
+		while ( (newIndex > 1) && newValue.compareTo(internalArray[parentIndex]) > 0) {
 			internalArray[newIndex] = internalArray[parentIndex];
 		newIndex = parentIndex;
 			parentIndex = newIndex/2; 
 		}
 	
-		internalArray[newIndex] = newEntry;
+		internalArray[newIndex] = newValue;
 	}
 
+	// method to expand the array
 	  private void doubleArray() { 
 	      Comparable[] tempArray = new Comparable[internalArray.length * 2]; 
 	      for(int k = 0; k < heapSize; k++) 

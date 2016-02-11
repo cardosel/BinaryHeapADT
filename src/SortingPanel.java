@@ -104,6 +104,8 @@ public class SortingPanel
         break;
       case 2: 
         ArraySorter.bubbleSort(this.intArray);
+        
+        // displays new heapSort method
       case 3: 
           ArraySorter.heapSort(intArray);
       }
