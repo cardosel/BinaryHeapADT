@@ -26,23 +26,48 @@ public class ArraySorter
     return minIndex;
   }
   
-  
-  public static void heapsort( Comparable [ ] array )
+  public static void heapSort(Comparable[] array)
   {
-      for( int i = array.length / 2; i >= 0; i-- ) 
-          siftDown();
-      for( int i = array.length - 1; i > 0; i-- )
-      {
-          swap( array, 0, i );            
-
-      }
+    for (int i = 1; i < array.length; i++) {
+      insert(array, i);
+    }
   }
+  
+  public static void heapify(Comparable[] array, int n) {
+		
+		// create first heap
+		for (int rootIndex = n/2-1; rootIndex >= 0; rootIndex--)
+			reheap(array, rootIndex, n-1);
+		swap(array, 0, n-1);
+		for (int lastIndex = n-2; lastIndex > 0; lastIndex--) {
+			reheap(array, 0, lastIndex);
+			swap(array, 0, lastIndex);
+		} 
+	}
 
+  private static void reheap(Comparable[] heap, int rootIndex, int lastIndex) {
+		boolean done = false;
+		Comparable orphan = heap[rootIndex];
+		int largerChildIndex = 2 * rootIndex + 1; // index of left child, if any
+		
+		while (!done && (largerChildIndex <= lastIndex) ) {
+			int rightChildIndex = largerChildIndex + 1;
+			if ( (rightChildIndex <= lastIndex) &&
+			      heap[rightChildIndex].compareTo(heap[largerChildIndex]) > 0) {
+				largerChildIndex = rightChildIndex;
+			}
+			if (orphan.compareTo(heap[largerChildIndex]) < 0) {
+				heap[rootIndex] = heap[largerChildIndex];
+				rootIndex = largerChildIndex;
+				largerChildIndex = 2 * rootIndex + 1; // index of next left child
+			}
+			else
+				done = true;
+		} 
+		
+		heap[rootIndex] = orphan;
+	}
 
-private static void siftDown() {
-	
-	
-}
 
 
 

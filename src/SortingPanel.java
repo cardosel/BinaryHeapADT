@@ -105,7 +105,7 @@ public class SortingPanel
       case 2: 
         ArraySorter.bubbleSort(this.intArray);
       case 3: 
-          ArraySorter.heapsort(this.intArray);
+          ArraySorter.heapSort(intArray);
       }
     	
       }

@@ -61,6 +61,25 @@ public class SorterTester
     System.out.println("************************");
   }
   
+  public static void testArrayHeapSort(Comparable[] array)
+  {
+    if (PRINT_NUMS)
+    {
+      System.out.println("before array heapsort: ");
+      printArray(array);
+    }
+    long pre1 = System.currentTimeMillis();
+    ArraySorter.heapSort(array);
+    long pre2 = System.currentTimeMillis();
+    if (PRINT_NUMS)
+    {
+      System.out.println("after array heapsort: ");
+      printArray(array);
+    }
+    System.out.println("array heapsort took " + (pre2 - pre1) + " ms");
+    System.out.println("************************");
+  }
+  
   public static void printArray(Comparable[] array)
   {
     if (array == null)
@@ -108,6 +127,8 @@ public class SorterTester
     testArraySelectionSort(randomArrayCopies[0]);
     testArrayInsertionSort(randomArrayCopies[1]);
     testArrayBubbleSort(randomArrayCopies[2]);
+    testArrayHeapSort(randomArrayCopies[2]);
+  
   }
   
   public static void main(String[] args)

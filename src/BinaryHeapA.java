@@ -3,31 +3,40 @@ import java.lang.Comparable;
 
 
 
-public class BinaryHeapA<T extends Comparable<T>> implements BinaryHeap<T>{
+public class BinaryHeapA<T extends java.lang.Comparable<T>> implements BinaryHeap<T>{
 	
-private Node root = null;
-private int heapSize = 0;
+// comparable array representing internal array
 private Comparable[] internalArray;
+// integer variable representing size of heap
+private int heapSize;
+// node variable reprsenting root of heap
+private Node root = null;
+private int lastIndex;
 
 
-public void delete() {
-    for (int i = heapSize; i < internalArray.length - 1; i++) {
-        internalArray[i] = internalArray[i+1];
-    }
-}
+// BinaryHeapA constructor
 public BinaryHeapA() {
     heapSize = internalArray.length;
     internalArray = (T[]) new Comparable[ ( heapSize + 2 ) * 11 / 10 ];
 
     buildMaxHeap(internalArray);
 }	
-	
-	public void maxHeapify(Comparable[] valueArray) {
+
+// method to delete values within array
+public void delete() {
+    for (int i = heapSize; i < internalArray.length - 1; i++) {
+        internalArray[i] = internalArray[i+1];
+    }
+}
+	// max-heapify method that takes in a comparable array
+	public void maxHeapify(Comparable[] array) {
 			int tempSize = heapSize + 1;
 			Node currentNode = root;
 			
+			
+			
 			if (heapSize == 0 || root == null) {
-				root = new Node(valueArray, null);
+				root = new Node(array, null);
 				currentNode = root;
 				//System.out.println(currentNode.value + " is added at root");
 			} else {
@@ -54,14 +63,14 @@ public BinaryHeapA() {
 				}
 	
 				if (currentNode.leftChild == null) {
-					currentNode.leftChild = new Node(valueArray, currentNode);
+					currentNode.leftChild = new Node(array, currentNode);
 					//System.out.println(currentNode.leftChild.value
 					//		+ " added to left. parent is " + currentNode.value);
 					siftUp(currentNode.leftChild, "add");
 	
 				} else if (currentNode.leftChild != null
 						&& currentNode.rightChild == null) {
-					currentNode.rightChild = new Node(valueArray, currentNode);
+					currentNode.rightChild = new Node(array, currentNode);
 	//
 				//	System.out.println(currentNode.rightChild.value
 					//		+ " added to right. parent is " + currentNode.value);
@@ -333,6 +342,30 @@ public Comparable remove() {
 	public Comparable peek(){
 		return root.value;
 	}
+
+	public void add(Comparable newEntry) {
+		lastIndex++;
+	
+		if (lastIndex >= internalArray.length)
+			doubleArray(); // expand array
+	
+		int newIndex = lastIndex;
+		int parentIndex = newIndex/2;
+		while ( (newIndex > 1) && newEntry.compareTo(internalArray[parentIndex]) > 0) {
+			internalArray[newIndex] = internalArray[parentIndex];
+		newIndex = parentIndex;
+			parentIndex = newIndex/2; 
+		}
+	
+		internalArray[newIndex] = newEntry;
+	}
+
+	  private void doubleArray() { 
+	      Comparable[] tempArray = new Comparable[internalArray.length * 2]; 
+	      for(int k = 0; k < heapSize; k++) 
+	         tempArray[k] = internalArray[k]; 
+	      internalArray = tempArray; 
+	   } 
 
 
 
